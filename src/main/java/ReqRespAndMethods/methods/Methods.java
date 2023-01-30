@@ -20,4 +20,25 @@ public class Methods extends ServiceCommons {
         return this;
     }
 
+    public Methods findMovie(String movieTitle) {
+
+        for (int i = 0; i <lib.response.jsonPath().getList("Search.Title").size() ; i++) {
+            if (lib.response.jsonPath().getString("Search.Title["+i+"]").equals(movieTitle)){
+                variables.setMovieTitle(lib.response.jsonPath().getString("Search.Title["+i+"]"));
+                variables.setImdbID(lib.response.jsonPath().getString("Search.imdbID["+i+"]"));
+            }
+        }
+
+        return this;
+    }
+
+    public Methods checkImdbRating(String imdbRating) {
+        lib.get(GetData.Url.BASE_URI.getValue()+"?i="+variables.getImdbID()+"&apikey="+variables.getApiKey(),"getMovie");
+        lib.checkStatusCode(HttpStatus.SC_OK);
+
+        lib.control(lib.response.jsonPath().getString("imdbRating").equals(imdbRating)
+                ,"IMDB Rating sayilari dogrulandi."
+                ,"IMDB Rating sayilari dogrulanamadi. Response'daki imdb rating -> "+lib.response.jsonPath().getString("imdbRating")+" Beklenen imdb rating -> "+ imdbRating);
+        return this;
+    }
 }

@@ -26,5 +26,6 @@ public class Variables {
 
     private String movieTitle;
 
+    private String imdbID;
 
 }
